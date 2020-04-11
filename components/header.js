@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
-export default function Header({ 
-  pages 
+export default function Header({
+  pages
 }) {
   return (
     <nav id="header" className="w-full z-30 top-0 py-1">
@@ -18,12 +18,12 @@ export default function Header({
             <div className="hidden md:flex md:items-center md:w-auto w-full order-3 md:order-3 flex-grow ml-10" id="menu">
                 <nav>
                     <ul className="md:flex items-center justify-between text-base text-gray-700 pt-4 md:pt-0">
-                      {pages && pages.map((page, idx) => {
+                      {pages && pages.map(page => {
                         if (page.type === 'page') {
                           return (
-                            <li key={idx}>
-                              <Link href={page.url}>
-                                <a className="inline-block no-underline hover:text-black hover:underline py-2 px-4" href={page.url}>{page.name}</a>
+                            <li key={page.url}>
+                              <Link href="/[slug]" as={page.url}>
+                                <a className="inline-block no-underline hover:text-black hover:underline py-2 px-4">{page.name}</a>
                               </Link>
                             </li>
                           )
