@@ -1,4 +1,4 @@
-// import CartContext from '../../context/cart-provider';
+import { useAddToCart } from '../../lib/cart';
 
 export default function AddToCartButton({
   children,
@@ -7,13 +7,7 @@ export default function AddToCartButton({
   productId,
   variantId,
 }) {
-  // const value = useContext(CartContext);
-  // const addToCart = value && value.addToCart;
-  // const addingToCart = value && value.state.addingToCart;
-
-  // Remove below once context is figured out
-  const addingTo = () => alert('added')
-  const addingToCart = false
+  const { addToCart, addingToCart, error } = useAddToCart(product)
 
   let productOptions
   if (showOptions && product.options && product.options.edges.length) {
@@ -38,7 +32,7 @@ export default function AddToCartButton({
       </div>
     ))
   }
-  
+
   return (
     <div className="bc-product-card">
       <div className="bc-product__actions" data-js="bc-product-group-actions">
@@ -46,13 +40,13 @@ export default function AddToCartButton({
           <div className="bc-product-form__product-message"></div>
 
           {productOptions}
-          
+
           <button
             className="w-full bg-black hover:bg-white hover:text-black border border-black text-white font-bold py-3 px-12 lg:px-8 duration-200 transition-colors mb-6 lg:mb-0"
             type="submit"
-            disabled={addingToCart === productId}
-            onClick={() => addToCart(productId, variantId)}>
-            {addingToCart === productId ? 'Adding to Cart' : children}
+            disabled={addingToCart}
+            onClick={addToCart}>
+            {error ? 'An error ocurred' : addingToCart ? 'Adding to Cart...' : children}
           </button>
         </div>
       </div>
