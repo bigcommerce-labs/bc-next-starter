@@ -62,6 +62,9 @@ export default async function cart(req, res) {
 
       await updateProductInCart(cartId, itemId, product)
 
+      // Update the cart cookie
+      setCartCookie(res, cartId)
+
       return res.status(200).json({ done: true })
     }
 
@@ -74,6 +77,11 @@ export default async function cart(req, res) {
           errors: [{ message: 'Invalid request' }],
         })
       }
+
+      await removeProductFromCart(cartId, itemId)
+
+      // Update the cart cookie
+      setCartCookie(res, cartId)
 
       return res.status(200).json({ done: true })
     }
