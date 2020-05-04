@@ -19,7 +19,7 @@ export default async function signup(req, res) {
   const data = { email, firstName, lastName, password }
   const customer = await createCustomer(data)
 
-  await setLoginCookie(res, { id: customer.id })
+  await setLoginCookie(res, { id: customer.id, email: customer.email })
 
   res.status(200).json({ done: true })
 }
