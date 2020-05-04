@@ -17,7 +17,6 @@
     "handlebars": "^4.7.3",
     "handlebars-utils": "^1.0.6",
     "isomorphic-unfetch": "3.0.0",
-    "nanoid": "^3.1.2",
     "next": "9.3.0",
     "next-connect": "^0.6.1",
     "node-fetch": "^2.6.0",
