@@ -6,6 +6,10 @@
     "build": "next build",
     "start": "next start"
   },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true
+  },
   "dependencies": {
     "classnames": "2.2.6",
     "cookie": "^0.4.0",
@@ -16,14 +20,19 @@
     "nanoid": "^3.1.2",
     "next": "9.3.0",
     "next-connect": "^0.6.1",
+    "node-fetch": "^2.6.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "swr": "^0.2.0"
   },
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^2.1.0",
+    "@types/node": "^13.13.4",
+    "@types/node-fetch": "^2.5.7",
+    "@types/react": "^16.9.34",
     "dotenv": "8.2.0",
     "postcss-preset-env": "^6.7.0",
-    "tailwindcss": "^1.2.0"
+    "tailwindcss": "^1.2.0",
+    "typescript": "^3.8.3"
   }
 }
