@@ -2,13 +2,14 @@ import {
   getCart,
   createCartWithProduct,
   addProductToCart,
+  updateProductInCart,
   removeProductFromCart,
 } from '../../lib/api/bigcommerce/cart'
 import { BigComerceError } from '../../lib/api/bigcommerce/fetch-api'
-import { setCartCookie, getCartCookie } from '../../lib/api/bigcommerce/cookies'
+import { getCartCookie, setCartCookie } from '../../lib/api/bigcommerce/cookies'
 import isAllowedMethod from '../../lib/api/is-allowed-method'
 
-const METHODS = ['GET', 'POST', 'DELETE']
+const METHODS = ['GET', 'POST', 'PUT', 'DELETE']
 
 export default async function cart(req, res) {
   if (!isAllowedMethod(req, res, METHODS)) return
@@ -20,13 +21,10 @@ export default async function cart(req, res) {
     if (req.method === 'GET') {
       const result = cartId && (await getCart(cartId))
 
-      if (!result) {
-        return res.status(404).json({
-          errors: [{ message: 'Cart not found' }],
-        })
-      }
+      // If `data` is null, the cookie exists but the cart wasn't found, so, remove the cookie
+      if (result?.data === null) setCartCookie(res)
 
-      return res.status(200).json({ cart: result.data })
+      return res.status(200).json({ cart: result?.data || null })
     }
 
     // Create or add a product to the cart
@@ -51,6 +49,22 @@ export default async function cart(req, res) {
       return res.status(200).json({ done: true })
     }
 
+    // Update product in cart
+    if (req.method === 'PUT') {
+      const { itemId } = req.query
+      const { product } = req.body
+
+      if (!cartId || !itemId || !product) {
+        return res.status(400).json({
+          errors: [{ message: 'Invalid request' }],
+        })
+      }
+
+      await updateProductInCart(cartId, itemId, product)
+
+      return res.status(200).json({ done: true })
+    }
+
     // Remove a product from the cart
     if (req.method === 'DELETE') {
       const { itemId } = req.query
@@ -60,8 +74,6 @@ export default async function cart(req, res) {
           errors: [{ message: 'Invalid request' }],
         })
       }
-
-      await removeProductFromCart(cartId, itemId)
 
       return res.status(200).json({ done: true })
     }

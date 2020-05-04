@@ -1,9 +1,15 @@
 import fetch, { Response, RequestInit } from 'node-fetch'
 
 export class BigComerceError extends Error {
-  constructor(msg: string) {
+  status?: number
+
+  constructor(msg: string, res?: Response) {
     super(msg)
     this.name = 'BigCommerceAPIError'
+
+    if (res) {
+      this.status = res.status
+    }
   }
 }
 
@@ -11,8 +17,10 @@ export default async function fetchApi(
   endpoint: string,
   options: RequestInit = {}
 ) {
+  let res: Response
+
   try {
-    const res = await fetch(
+    res = await fetch(
       process.env.NEXT_EXAMPLE_BIGCOMMERCE_STORE_API_URL + endpoint,
       {
         ...options,
@@ -25,15 +33,15 @@ export default async function fetchApi(
         },
       }
     )
-
-    if (res.ok) {
-      return await res.json()
-    } else {
-      throw new BigComerceError(await getErrorText(res))
-    }
   } catch (error) {
     throw new BigComerceError(`Fetch to Big Commerce failed: ${error.message}`)
   }
+
+  if (!res.ok) {
+    throw new BigComerceError(await getErrorText(res), res)
+  }
+
+  return res
 }
 
 async function getErrorText(res: Response) {

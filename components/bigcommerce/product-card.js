@@ -6,7 +6,7 @@ import ProductPrices from './product-prices'
 
 export default function ProductCard({ product }) {
   const { data, error } = useCart()
-  const products = data?.cart.line_items.physical_items || []
+  const products = data?.cart?.line_items.physical_items || []
   const item = useMemo(
     () => products.find((p) => p.product_id === product.entityId),
     [products, product.entityId]
