@@ -5,7 +5,7 @@ import Header from '../components/header'
 import SectionSeparator from '../components/section-separator'
 import Layout from '../components/layout'
 import PageContent from '../components/bigcommerce/page-content'
-import { getPages, getPageByURL } from '../lib/bigcommerce-rest-api'
+import { getPages, getPageByURL } from '../lib/api/bigcommerce/content'
 import Head from 'next/head'
 
 export default function Page({ allPages, page }) {
@@ -28,14 +28,15 @@ export default function Page({ allPages, page }) {
                   {page.name} | Next.js Storefront Example with BigCommerce
                 </title>
               </Head>
-              <h1 className="tracking-wide font-large text-2xl font-bold text-gray-800 w-full text-center mt-10">{page.name}</h1>
-              
+              <h1 className="tracking-wide font-large text-2xl font-bold text-gray-800 w-full text-center mt-10">
+                {page.name}
+              </h1>
+
               <SectionSeparator />
 
               <PageContent page={page} />
 
               <SectionSeparator />
-
             </article>
           </>
         )}
@@ -52,17 +53,17 @@ export async function getStaticProps({ params }) {
   return {
     props: {
       allPages,
-      page: thisPage
+      page: thisPage,
     },
   }
 }
 
 export async function getStaticPaths() {
   const allPages = await getPages()
-  const onlyPageTypePages = allPages.filter(page => page.type === 'page')
+  const onlyPageTypePages = allPages.filter((page) => page.type === 'page')
 
   return {
-    paths: onlyPageTypePages?.map(page => page.url) || [],
+    paths: onlyPageTypePages?.map((page) => page.url) || [],
     fallback: true,
   }
 }
