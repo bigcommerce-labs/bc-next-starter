@@ -37,5 +37,5 @@ export default async function login(req, res) {
 
   await setLoginCookie(res, { id: customer.id })
 
-  return res.status(200).json({ done: true })
+  res.status(200).json({ done: true })
 }

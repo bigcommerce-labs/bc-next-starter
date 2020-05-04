@@ -21,5 +21,5 @@ export default async function signup(req, res) {
 
   await setLoginCookie(res, { id: customer.id })
 
-  return res.status(200).json({ done: true })
+  res.status(200).json({ done: true })
 }
