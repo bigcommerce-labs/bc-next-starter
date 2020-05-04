@@ -2,18 +2,16 @@ import {
   getCart,
   createCartWithProduct,
   addProductToCart,
+  removeProductFromCart,
 } from '../../lib/api/bigcommerce/cart'
 import { BigComerceError } from '../../lib/api/bigcommerce/fetch-api'
 import { setCartCookie, getCartCookie } from '../../lib/api/bigcommerce/cookies'
 import isAllowedMethod from '../../lib/api/is-allowed-method'
 
-const METHODS = ['GET', 'POST']
+const METHODS = ['GET', 'POST', 'DELETE']
 
 export default async function cart(req, res) {
   if (!isAllowedMethod(req, res, METHODS)) return
-
-  // Uncomment the following line if you want to test the API with some latency
-  // await new Promise(resolve => setTimeout(resolve, 1000))
 
   const cartId = getCartCookie(req)
 
@@ -50,6 +48,21 @@ export default async function cart(req, res) {
 
       // There's no need to send any additional data here, the UI can use this response to display a
       // "success" for the operation and revalidate the GET request for this same endpoint right after.
+      return res.status(200).json({ done: true })
+    }
+
+    // Remove a product from the cart
+    if (req.method === 'DELETE') {
+      const { itemId } = req.query
+
+      if (!cartId || !itemId) {
+        return res.status(400).json({
+          errors: [{ message: 'Invalid request' }],
+        })
+      }
+
+      await removeProductFromCart(cartId, itemId)
+
       return res.status(200).json({ done: true })
     }
   } catch (error) {

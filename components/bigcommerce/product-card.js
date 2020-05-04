@@ -7,11 +7,11 @@ import ProductPrices from './product-prices'
 export default function ProductCard({ product }) {
   const { data, error } = useCart()
   const products = data?.cart.line_items.physical_items || []
-  const count = useMemo(
-    () =>
-      products.find((p) => p.product_id === product.entityId)?.quantity ?? 0,
+  const item = useMemo(
+    () => products.find((p) => p.product_id === product.entityId),
     [products, product.entityId]
   )
+  const count = item?.quantity ?? 0
 
   if (error) {
     // Currently the error is not being handled, so log it
@@ -46,6 +46,7 @@ export default function ProductCard({ product }) {
           product={product}
           productId={product.entityId}
           variantId={product.variants.edges[0].node?.entityId}
+          itemId={item?.id}
         >
           Add to Cart {count ? `(${count})` : null}
         </AddToCartButton>

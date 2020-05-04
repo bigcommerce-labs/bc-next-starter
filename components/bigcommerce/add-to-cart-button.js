@@ -6,6 +6,7 @@ export default function AddToCartButton({
   product,
   productId,
   variantId,
+  itemId,
 }) {
   const { addToCart, addingToCart, error } = useAddToCart()
 
@@ -60,7 +61,9 @@ export default function AddToCartButton({
             className="w-full bg-black hover:bg-white hover:text-black border border-black text-white font-bold py-3 px-12 lg:px-8 duration-200 transition-colors mb-6 lg:mb-0"
             type="submit"
             disabled={addingToCart}
-            onClick={() => addToCart({ productId, variantId, quantity: 1 })}
+            onClick={() =>
+              addToCart({ product: { productId, variantId, quantity: 1 } })
+            }
           >
             {error
               ? 'An error ocurred'
