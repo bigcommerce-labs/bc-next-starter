@@ -1,4 +1,4 @@
-// import CartContext from '../../context/cart-provider';
+import { useAddToCart } from '../../lib/cart'
 
 export default function AddToCartButton({
   children,
@@ -6,30 +6,40 @@ export default function AddToCartButton({
   product,
   productId,
   variantId,
+  itemId,
 }) {
-  // const value = useContext(CartContext);
-  // const addToCart = value && value.addToCart;
-  // const addingToCart = value && value.state.addingToCart;
-
-  // Remove below once context is figured out
-  const addingTo = () => alert('added')
-  const addingToCart = false
+  const { addToCart, addingToCart, error } = useAddToCart()
 
   let productOptions
   if (showOptions && product.options && product.options.edges.length) {
     productOptions = product.options.edges.map((option, optionIdx) => (
       <div className="w-full mb-6" key={optionIdx}>
-        <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor={`bcoption_4${option.node.entityId}`}>
+        <label
+          className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+          htmlFor={`bcoption_4${option.node.entityId}`}
+        >
           {option.node.displayName}
         </label>
         <div className="relative">
-          <select className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id={`bcoption_4${option.node.entityId}`}>
-            {option.node?.values?.edges?.length && option.node.values.edges.map((value, valueIdx) => (
-              <option value={value.node.entityId} key={valueIdx}>{value.node.label}</option>
-            ))}
+          <select
+            className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+            id={`bcoption_4${option.node.entityId}`}
+          >
+            {option.node?.values?.edges?.length &&
+              option.node.values.edges.map((value, valueIdx) => (
+                <option value={value.node.entityId} key={valueIdx}>
+                  {value.node.label}
+                </option>
+              ))}
           </select>
           <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-            <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+            <svg
+              className="fill-current h-4 w-4"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+            >
+              <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+            </svg>
           </div>
         </div>
         {!option.node.isRequired && (
@@ -38,7 +48,7 @@ export default function AddToCartButton({
       </div>
     ))
   }
-  
+
   return (
     <div className="bc-product-card">
       <div className="bc-product__actions" data-js="bc-product-group-actions">
@@ -46,16 +56,23 @@ export default function AddToCartButton({
           <div className="bc-product-form__product-message"></div>
 
           {productOptions}
-          
+
           <button
             className="w-full bg-black hover:bg-white hover:text-black border border-black text-white font-bold py-3 px-12 lg:px-8 duration-200 transition-colors mb-6 lg:mb-0"
             type="submit"
-            disabled={addingToCart === productId}
-            onClick={() => addToCart(productId, variantId)}>
-            {addingToCart === productId ? 'Adding to Cart' : children}
+            disabled={addingToCart}
+            onClick={() =>
+              addToCart({ product: { productId, variantId, quantity: 1 } })
+            }
+          >
+            {error
+              ? 'An error ocurred'
+              : addingToCart
+              ? 'Adding to Cart...'
+              : children}
           </button>
         </div>
       </div>
     </div>
-  );
+  )
 }
