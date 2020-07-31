@@ -19,16 +19,15 @@ export default function Index({ allPages, allProducts, homepageContent }) {
         </Head>
         <Container>
           <Header pages={allPages} />
-        </Container>
-        {homepageContent && (
-          <div
-            className="bc-widget-container"
-            dangerouslySetInnerHTML={{ __html: homepageContent }}
-          />
-        )}
-        <WidgetScriptForceReloader />
+        
+          {homepageContent && (
+            <div
+              className="bc-widget-container"
+              dangerouslySetInnerHTML={{ __html: homepageContent }}
+            />
+          )}
+          <WidgetScriptForceReloader />
 
-        <Container>
           {allProducts.length > 0 && (
             <div className="mb-24">
               <ProductGrid products={allProducts} />

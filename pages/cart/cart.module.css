@@ -1,0 +1,41 @@
+.cartProvider {
+    display: initial;
+}
+
+.cartItems {
+    display: initial;
+}
+
+.cartItem {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dotted grey;
+}
+
+.cartItem input {
+  max-height: 1.5rem;
+  max-width: 50px;
+}
+
+.cartItemPrices {
+  text-align: right;
+}
+
+.cartItemTotal {
+  font-weight: bold;
+}
+
+.cartSubtotal {
+  text-align: right;
+  margin-top: 1rem;
+}
+
+.cartSubtotalText {
+  font-weight: bold;
+}
+
+.cartCheckout {
+    display: initial;
+}
