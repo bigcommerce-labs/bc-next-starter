@@ -47,6 +47,10 @@ export default function Index({ allPages, allProducts, homepageContent }) {
   const { updateCart, updatingCart, error } = useUpdateCart()
   const cart = keysToCamel(data?.cart) || []
 
+  const onCheckout = () => {
+    window.location.href = cart.redirectUrls.checkoutUrl
+  }
+
   const onUpdate = (method, itemId, newItem) => {
     updateCart({
       product: { 
@@ -71,6 +75,7 @@ export default function Index({ allPages, allProducts, homepageContent }) {
         </Container>
         <Container>
           <Cart.Provider
+              onCheckout={onCheckout}
               onUpdate={onUpdate}
               cart={cart}
               styles={cartStyles}
